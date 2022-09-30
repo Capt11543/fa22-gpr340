@@ -72,6 +72,19 @@ Point2D World::SW(const Point2D& p) {
   return {p.x, p.y+1};
 }
 
+std::vector<Point2D> World::getNeighbors(const Point2D& p) {
+  std::vector<Point2D> result;
+  
+  result.push_back(NE(p));
+  result.push_back(E(p));
+  result.push_back(SE(p));
+  result.push_back(SW(p));
+  result.push_back(W(p));
+  result.push_back(NW(p));
+
+  return result;
+}
+
 bool World::isValidPosition(const Point2D& p) {
     auto sideOver2=sideSize/2;
     return

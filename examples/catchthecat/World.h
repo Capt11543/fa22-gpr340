@@ -63,6 +63,8 @@ class World: GameObject {
   static Point2D SE(const Point2D &p);
   static Point2D SW(const Point2D &p);
 
+  std::vector<Point2D> getNeighbors(const Point2D& p);
+
   // returns the cat position
   Point2D getCat();
 
