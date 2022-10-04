@@ -6,15 +6,20 @@
 class World;
 
 struct QueueEntry {
-  Point2D position;
-  int weight;
-  bool operator<(const QueueEntry& rhs) const;
+	Point2D position;
+	int weight;
+
+	QueueEntry(Point2D position, int weight) : position(position), weight(weight) {};
+	
+	bool operator<(const QueueEntry& rhs) const {
+		return weight < rhs.weight;
+	}
 };
 
 class Agent {
-public:
-  explicit Agent()= default;;
-  virtual Point2D Move(World*)=0;
+	public:
+		explicit Agent() = default;;
+		virtual Point2D Move(World*) = 0;
 };
 
 #endif  // AGENT_H
