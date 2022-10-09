@@ -14,6 +14,10 @@ struct QueueEntry {
 	bool operator<(const QueueEntry& rhs) const {
 		return weight < rhs.weight;
 	}
+
+	bool operator==(const QueueEntry& rhs) const {
+		return position == rhs.position && weight == rhs.weight;
+	}
 };
 
 class Agent {
