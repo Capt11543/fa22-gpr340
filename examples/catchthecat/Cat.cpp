@@ -9,7 +9,7 @@ Point2D Cat::Move(World* world) {
     std::map<int, std::map<int, bool>> visited;
     std::map<int, std::map<int, Point2D>> cameFrom;
     std::vector<QueueEntry> queue;
-    queue.push_back(QueueEntry(cat, 0));
+    queue.push_back({ cat, 0 });
 
     while (!queue.empty()) {
         QueueEntry head = queue[0];
@@ -37,7 +37,7 @@ Point2D Cat::Move(World* world) {
             }
             
             // add neighbor to queue
-            queue.push_back(QueueEntry(neighbor, head.weight + 1));
+            queue.push_back({ neighbor, head.weight + 1 });
 
             // mark the neighbor as having come from the head
             cameFrom[neighbor.x][neighbor.y] = head.position;

@@ -10,14 +10,16 @@ struct QueueEntry {
 	int weight;
 
 	QueueEntry(Point2D position, int weight) : position(position), weight(weight) {};
-	
-	bool operator<(const QueueEntry& rhs) const {
-		return weight < rhs.weight;
-	}
+	QueueEntry() = default;
 
-	bool operator==(const QueueEntry& rhs) const {
+	
+	//bool operator<(const QueueEntry& rhs) const {
+	//	return weight < rhs.weight;
+	//}
+
+	/*bool operator==(const QueueEntry& rhs) const {
 		return position == rhs.position && weight == rhs.weight;
-	}
+	}*/
 };
 
 class Agent {
