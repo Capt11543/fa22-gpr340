@@ -15,7 +15,7 @@ class Queue {
 			
 			Node(R data) {
 				this->data = data;
-				next = NULL;
+				next = nullptr;
 			}
 		};
 		
@@ -34,10 +34,41 @@ class Queue {
 
 template<typename T>
 void Queue<T>::clear() {
-	Node<T> temp;
+	Node<T>* temp;
 
-	while (front != null) {
+	while (front != nullptr) {
 		temp = front;
-		front = 
+		front = front->next;
+		temp->next = nullptr;
+		delete temp;
 	}
+
+	rear = nullptr;
+	count = 0;
+}
+
+template<typename T>
+T Queue<T>::dequeue() {
+	Node<T>* temp;
+	T data = T();
+
+	if (front != nullptr) {
+		temp = front;
+		front = front->next;
+
+		data = temp->data;
+		temp->next = null;
+		delete temp;
+
+		count--;
+	}
+
+	return data;
+}
+
+template<typename T>
+void Queue<T>::enqueue(T data) {
+	Node<T>* newNode;
+
+	newNode = new Node<T>(data);
 }
