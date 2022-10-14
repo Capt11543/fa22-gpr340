@@ -30,6 +30,8 @@ class Agent {
 	public:
 		explicit Agent() = default;;
 		virtual Point2D Move(World*) = 0;
+	private:
+		bool isExit(Point2D point);
 };
 
 #endif  // AGENT_H

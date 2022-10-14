@@ -17,6 +17,9 @@ Point2D Cat::Move(World* world) {
 
         // mark the head as visited
         visited[head.position.x][head.position.y] = true;
+
+        // check if the head is an exit
+        
         
         // for each neighbor
         std::vector<Point2D> neighbors = world->getNeighbors(head.position);
@@ -25,17 +28,17 @@ Point2D Cat::Move(World* world) {
                 continue;
             }
 
-            // check if is not visited yet
+            // don't add if it is already visited
             if (visited[neighbor.x][neighbor.y]) {
                 continue;
             }
 
-            // check if it is in the queue
+            // don't add if it is already in the queue
             if (std::find(queue.begin(), queue.end(), neighbor) != queue.end()) {
                 continue;
             }
 
-            // check if it is not blocked
+            // don't add if it is blocked
             if (world->getContent(neighbor)) {
                 continue;
             }
