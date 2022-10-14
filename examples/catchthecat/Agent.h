@@ -20,6 +20,10 @@ struct QueueEntry {
 	/*bool operator==(const QueueEntry& rhs) const {
 		return position == rhs.position && weight == rhs.weight;
 	}*/
+
+	bool operator==(const Point2D& rhs) const {
+		return position.x == rhs.x && position.y == rhs.y;
+	}
 };
 
 class Agent {

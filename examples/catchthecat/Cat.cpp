@@ -21,6 +21,10 @@ Point2D Cat::Move(World* world) {
         // for each neighbor
         std::vector<Point2D> neighbors = world->getNeighbors(head.position);
         for (Point2D neighbor : neighbors) {
+            if (abs(neighbor.x) >= world->getWorldSideSize() / 2 || abs(neighbor.y) >= world->getWorldSideSize() / 2) {
+                continue;
+            }
+
             // check if is not visited yet
             if (visited[neighbor.x][neighbor.y]) {
                 continue;
