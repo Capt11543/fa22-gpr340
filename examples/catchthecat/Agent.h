@@ -2,6 +2,8 @@
 #define AGENT_H
 #include "Point2D.h"
 #include <map>
+#include <string>
+#include <sstream>
 
 class World;
 
@@ -9,20 +11,20 @@ struct QueueEntry {
 	Point2D position;
 	int weight;
 
+	bool operator==(const Point2D& rhs) const {
+		return position.x == rhs.x && position.y == rhs.y;
+	}
+	
 	QueueEntry(Point2D position, int weight) : position(position), weight(weight) {};
 	QueueEntry() = default;
 
-	
-	//bool operator<(const QueueEntry& rhs) const {
-	//	return weight < rhs.weight;
-	//}
+	std::string toString() {
+		std::stringstream output;
 
-	/*bool operator==(const QueueEntry& rhs) const {
-		return position == rhs.position && weight == rhs.weight;
-	}*/
+		output << "(" << position.x << ", " << position.y
+                       << ") weight: " << weight;
 
-	bool operator==(const Point2D& rhs) const {
-		return position.x == rhs.x && position.y == rhs.y;
+		return output.str();
 	}
 };
 
@@ -30,8 +32,8 @@ class Agent {
 	public:
 		explicit Agent() = default;;
 		virtual Point2D Move(World*) = 0;
-	private:
-		bool isExit(Point2D point);
+	protected:
+		bool isExit(World* world, Point2D point);
 };
 
 #endif  // AGENT_H

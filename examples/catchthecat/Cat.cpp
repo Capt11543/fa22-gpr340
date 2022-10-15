@@ -1,25 +1,37 @@
 #include <algorithm>
 #include "Cat.h"
+#include "functions.h"
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 #include "World.h"
 
 Point2D Cat::Move(World* world) {
     Point2D cat = world->getCat();
+    
     std::map<int, std::map<int, bool>> visited;
     std::map<int, std::map<int, Point2D>> cameFrom;
+    
+    Point2D endPoint = Point2D();
     std::vector<QueueEntry> queue;
     queue.push_back({ cat, 0 });
+    std::cout << printQueue(queue) << std::endl;
 
     while (!queue.empty()) {
         QueueEntry head = queue[0];
+        std::cout << "Head: " << head.toString() << std::endl;
+        
         queue.erase(queue.begin());
+        std::cout << printQueue(queue) << std::endl;
 
         // mark the head as visited
         visited[head.position.x][head.position.y] = true;
 
         // check if the head is an exit
-        
+        if (isExit(world, head.position)) {
+            endPoint = head.position;
+            break;
+        }
         
         // for each neighbor
         std::vector<Point2D> neighbors = world->getNeighbors(head.position);
@@ -45,6 +57,7 @@ Point2D Cat::Move(World* world) {
             
             // add neighbor to queue
             queue.push_back({ neighbor, head.weight + 1 });
+            std::cout << printQueue(queue) << std::endl;
 
             // mark the neighbor as having come from the head
             cameFrom[neighbor.x][neighbor.y] = head.position;
@@ -54,9 +67,22 @@ Point2D Cat::Move(World* world) {
         // if the absolute value of the x or the y is equal to world.sideSize / 2;
     }
 
-    /*
-    auto rand = Random::Range(0, 5);
-    auto pos = world->getCat();
+    // Build path
+    std::vector<Point2D> path;
+    Point2D head = endPoint;
+    while (head != cat) {
+      path.insert(path.begin(), head);
+      head = cameFrom[head.x][head.y];
+    }
+
+    // Return the first point in the path if the path is not empty
+    if (!path.empty()) {
+      return path[0];
+    }
+
+    // Return a random point if the path is empty
+    int rand = Random::Range(0, 5);
+    Point2D pos = world->getCat();
     switch (rand) {
     case 0:
         return World::NE(pos);
@@ -73,5 +99,4 @@ Point2D Cat::Move(World* world) {
     default:
         throw "random out of range";
     }
-    */
 }
