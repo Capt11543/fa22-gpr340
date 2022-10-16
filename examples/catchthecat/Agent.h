@@ -2,8 +2,6 @@
 #define AGENT_H
 #include "Point2D.h"
 #include <map>
-#include <string>
-#include <sstream>
 
 class World;
 
@@ -14,7 +12,6 @@ struct QueueEntry {
 	bool operator==(const Point2D& rhs) const;
 	QueueEntry(Point2D position, int weight) : position(position), weight(weight) {};
 	QueueEntry() = default;
-    std::string toString();
 };
 
 class Agent {
