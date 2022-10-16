@@ -36,28 +36,35 @@ Point2D Cat::Move(World* world) {
         // for each neighbor
         std::vector<Point2D> neighbors = world->getNeighbors(head.position);
         for (Point2D neighbor : neighbors) {
+          std::cout << "Checking point " << neighbor.toString() << std::endl;
+            
             if (abs(neighbor.x) >= world->getWorldSideSize() / 2 || abs(neighbor.y) >= world->getWorldSideSize() / 2) {
+                std::cout << "Point2D is outside of world bounds" << std::endl << std::endl;
                 continue;
             }
 
             // don't add if it is already visited
             if (visited[neighbor.x][neighbor.y]) {
+                std::cout << "Point2D has already been visited" << std::endl << std::endl;
                 continue;
             }
 
             // don't add if it is already in the queue
             if (std::find(queue.begin(), queue.end(), neighbor) != queue.end()) {
+                std::cout << "Point2D is already in the queue" << std::endl << std::endl;
                 continue;
             }
 
             // don't add if it is blocked
             if (world->getContent(neighbor)) {
+                std::cout << "Point2D is blocked" << std::endl << std::endl;
                 continue;
             }
             
             // add neighbor to queue
+            std::cout << "Queueing point" << std::endl;
             queue.push_back({ neighbor, head.weight + 1 });
-            std::cout << printQueue(queue) << std::endl;
+            std::cout << "The queue is now: " << std::endl << printQueue(queue) << std::endl;
 
             // mark the neighbor as having come from the head
             cameFrom[neighbor.x][neighbor.y] = head.position;
@@ -70,6 +77,7 @@ Point2D Cat::Move(World* world) {
     // Build path
     std::vector<Point2D> path;
     Point2D head = endPoint;
+
     while (head != cat) {
       path.insert(path.begin(), head);
       head = cameFrom[head.x][head.y];

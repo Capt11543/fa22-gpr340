@@ -11,21 +11,10 @@ struct QueueEntry {
 	Point2D position;
 	int weight;
 
-	bool operator==(const Point2D& rhs) const {
-		return position.x == rhs.x && position.y == rhs.y;
-	}
-	
+	bool operator==(const Point2D& rhs) const;
 	QueueEntry(Point2D position, int weight) : position(position), weight(weight) {};
 	QueueEntry() = default;
-
-	std::string toString() {
-		std::stringstream output;
-
-		output << "(" << position.x << ", " << position.y
-                       << ") weight: " << weight;
-
-		return output.str();
-	}
+    std::string toString();
 };
 
 class Agent {
