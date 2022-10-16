@@ -4,9 +4,11 @@
 #include "Agent.h"
 
 class Catcher: public Agent {
- public:
-    explicit Catcher():Agent(){};
-    Point2D Move(World*) override;
+     public:
+        explicit Catcher():Agent(){};
+        Point2D Move(World*) override;
+   private:
+        Point2D chooseRandomPoint(World* world);
 };
 
 #endif  // CATCHER_H
