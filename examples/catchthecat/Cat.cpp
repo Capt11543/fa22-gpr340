@@ -16,13 +16,16 @@ Point2D Cat::Move(World* world) {
     std::vector<QueueEntry> queue;
     queue.push_back({ cat, 0 });
     std::cout << printQueue(queue) << std::endl;
+    pause();
 
     while (!queue.empty()) {
         QueueEntry head = queue[0];
         std::cout << "Head: " << head.toString() << std::endl;
+        pause();
         
         queue.erase(queue.begin());
         std::cout << printQueue(queue) << std::endl;
+        pause();
 
         // mark the head as visited
         visited[head.position.x][head.position.y] = true;
@@ -30,6 +33,8 @@ Point2D Cat::Move(World* world) {
         // check if the head is an exit
         if (isExit(world, head.position)) {
             endPoint = head.position;
+            std::cout << "endPoint is " << endPoint.toString() << std::endl;
+            pause();
             break;
         }
         
@@ -38,26 +43,30 @@ Point2D Cat::Move(World* world) {
         for (Point2D neighbor : neighbors) {
           std::cout << "Checking point " << neighbor.toString() << std::endl;
             
-            if (abs(neighbor.x) >= world->getWorldSideSize() / 2 || abs(neighbor.y) >= world->getWorldSideSize() / 2) {
+            if (abs(neighbor.x) > world->getWorldSideSize() / 2 || abs(neighbor.y) > world->getWorldSideSize() / 2) {
                 std::cout << "Point2D is outside of world bounds" << std::endl << std::endl;
+                pause();
                 continue;
             }
 
             // don't add if it is already visited
             if (visited[neighbor.x][neighbor.y]) {
                 std::cout << "Point2D has already been visited" << std::endl << std::endl;
+                pause();
                 continue;
             }
 
             // don't add if it is already in the queue
             if (std::find(queue.begin(), queue.end(), neighbor) != queue.end()) {
                 std::cout << "Point2D is already in the queue" << std::endl << std::endl;
+                pause();
                 continue;
             }
 
             // don't add if it is blocked
             if (world->getContent(neighbor)) {
                 std::cout << "Point2D is blocked" << std::endl << std::endl;
+                pause();
                 continue;
             }
             
@@ -65,6 +74,7 @@ Point2D Cat::Move(World* world) {
             std::cout << "Queueing point" << std::endl;
             queue.push_back({ neighbor, head.weight + 1 });
             std::cout << "The queue is now: " << std::endl << printQueue(queue) << std::endl;
+            pause();
 
             // mark the neighbor as having come from the head
             cameFrom[neighbor.x][neighbor.y] = head.position;
