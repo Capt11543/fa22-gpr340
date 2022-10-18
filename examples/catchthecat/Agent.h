@@ -17,11 +17,8 @@ struct QueueEntry {
 
 class Agent {
 	public:
-		explicit Agent() = default;;
+		explicit Agent() = default;
 		virtual Point2D Move(World*) = 0;
-	protected:
-		bool isExit(World* world, Point2D point);
-        std::vector<Point2D> makePath(World* world, Point2D origin);
 };
 
 #endif  // AGENT_H

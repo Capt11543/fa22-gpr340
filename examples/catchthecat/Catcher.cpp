@@ -3,7 +3,7 @@
 
 Point2D Catcher::Move(World* world) { 
     Point2D cat = world->getCat();
-    std::vector<Point2D> path = makePath(world, cat);
+    std::vector<Point2D> path = world->getPath();
 
     if(!path.empty()) {
       return path[path.size() - 1];

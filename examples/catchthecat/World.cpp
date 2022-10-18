@@ -219,7 +219,8 @@ void World::step() {
 
   // run the turn
   if (catTurn) {
-    auto move = cat->Move(this);
+    path = makePathToExit();
+    Point2D move = cat->Move(this);
     if(catCanMoveToPosition(move)) {
       catPosition = move;
       catWon = catWinVerification();
@@ -284,4 +285,79 @@ bool World::catWinsOnSpace(Point2D point)
 {
     auto sideOver2 = sideSize / 2;
     return abs(point.x) == sideOver2 || abs(point.y) == sideOver2;
+}
+
+std::vector<Point2D> World::getPath() { return path; }
+
+std::vector<Point2D> World::makePathToExit() {
+  Point2D origin = getCat();
+  
+  std::map<int, std::map<int, bool>> visited;
+  std::map<int, std::map<int, Point2D>> cameFrom;
+
+  Point2D endPoint = Point2D();
+  std::vector<QueueEntry> queue;
+  queue.push_back(QueueEntry(origin, 0));
+
+  while (!queue.empty()) {
+    QueueEntry head = queue[0];
+    queue.erase(queue.begin());
+
+    // mark the head as visited
+    visited[head.position.x][head.position.y] = true;
+
+    // check if the head is an exit
+    if (isExit(head.position)) {
+      endPoint = head.position;
+      break;
+    }
+
+    // for each neighbor
+    std::vector<Point2D> neighbors = getNeighbors(head.position);
+    for (Point2D neighbor : neighbors) {
+      if (abs(neighbor.x) > getWorldSideSize() / 2 ||
+          abs(neighbor.y) > getWorldSideSize() / 2) {
+        continue;
+      }
+
+      // don't add if it is already visited
+      if (visited[neighbor.x][neighbor.y]) {
+        continue;
+      }
+
+      // don't add if it is already in the queue
+      if (std::find(queue.begin(), queue.end(), neighbor) != queue.end()) {
+        continue;
+      }
+
+      // don't add if it is blocked
+      if (getContent(neighbor)) {
+        continue;
+      }
+
+      // add neighbor to queue
+      queue.push_back({neighbor, head.weight + 1});
+
+      // mark the neighbor as having come from the head
+      cameFrom[neighbor.x][neighbor.y] = head.position;
+    }
+
+    // write win condition (path found condition) and navigation process here
+    // if the absolute value of the x or the y is equal to world.sideSize / 2;
+  }
+
+  // Build path
+  std::vector<Point2D> result;
+  Point2D head = endPoint;
+
+  while (head != origin) {
+    result.insert(result.begin(), head);
+    head = cameFrom[head.x][head.y];
+  }
+
+  return result;
+}
+
+bool World::isExit(Point2D point) {
+  return abs(point.x) == sideSize / 2 || abs(point.y) == sideSize / 2;
 }

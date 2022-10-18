@@ -8,7 +8,7 @@
 
 Point2D Cat::Move(World* world) {
     Point2D cat = world->getCat();
-    std::vector<Point2D> path = makePath(world, cat);
+    std::vector<Point2D> path = world->getPath();
 
     // Return the first point in the path if the path is not empty
     if (!path.empty()) {

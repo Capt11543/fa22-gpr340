@@ -36,6 +36,8 @@ class World : GameObject {
         // to represent the cat position we need only one byte. 4 bits for X and another 4 for Y
         // create a structure holding one byte for cat position and 16 bytes for the blocked map.
 
+        std::vector<Point2D> path;
+
         // clears the world
         void clearWorld();
 
@@ -51,6 +53,8 @@ class World : GameObject {
         // check if catcher can move to the position required
         // bool catcherCanMoveToPosition(Point2D pos) const;
 
+        bool isExit(Point2D point);
+        std::vector<Point2D> makePathToExit();
     public:
         explicit World(Engine* pEngine, int size = 11);
         explicit World(Engine* pEngine, int size, bool catTurn, Point2D cat, std::vector<bool> world);
@@ -105,6 +109,8 @@ class World : GameObject {
 
         //returns true if cat wins on the given space
         bool catWinsOnSpace(Point2D point);
+
+        std::vector<Point2D> getPath();
 };
 
 #endif  // WORLD_H
