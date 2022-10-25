@@ -44,8 +44,16 @@ class World : GameObject {
         // check if cat won
         bool catWinVerification();
 
+<<<<<<< HEAD
         // check if catcher won
         bool catcherWinVerification();
+=======
+ public:
+  explicit World(Engine* pEngine, int size=11);
+  explicit World(Engine* pEngine, int mapSideSize, bool isCatTurn, Point2D catPos, std::vector<bool>  map);
+
+  ~World();
+>>>>>>> upstream/master
 
         // check if cat can move to the position required
         // bool catCanMoveToPosition(Point2D pos) const;
@@ -95,6 +103,7 @@ class World : GameObject {
 
         static bool isNeighbor(const Point2D& p1, const Point2D& p2);
 
+<<<<<<< HEAD
         void OnDraw(SDL_Renderer* renderer) override;
         void OnGui(ImGuiContext* context) override;
         void Update(float deltaTime) override;
@@ -111,6 +120,21 @@ class World : GameObject {
         bool catWinsOnSpace(Point2D point);
 
         std::vector<Point2D> getPath();
+=======
+  //returns true if cat wins on the given space
+  bool catWinsOnSpace(Point2D point);
+
+  static std::vector<Point2D> neighbors(Point2D point){
+    std::vector<Point2D> n;
+    n.push_back(NE(point));
+    n.push_back(NW(point));
+    n.push_back(E(point));
+    n.push_back(W(point));
+    n.push_back(SW(point));
+    n.push_back(SE(point));
+    return n;
+  }
+>>>>>>> upstream/master
 };
 
 #endif  // WORLD_H
