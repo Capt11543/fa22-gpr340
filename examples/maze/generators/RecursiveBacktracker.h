@@ -14,7 +14,7 @@ class RecursiveBacktracker: public MazeGeneratorBase {
   std::vector<Point2D> getVisitables(World* w, const Point2D& p);
  public:
   RecursiveBacktracker() = default;
-  std::string GetName() override {return "Recursive Back-Tracker";};
+  std::string GetName() override {return "Recursive Back-Tracker";}
   bool Step(World * world) override;
   void Clear(World * world) override;
 };
