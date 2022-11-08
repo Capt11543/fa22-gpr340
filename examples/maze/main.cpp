@@ -1,5 +1,6 @@
 #define SDL_MAIN_HANDLED true
 #include <Engine.h>
+#include "generators/HuntAndKill.h"
 #include "World.h"
 
 int main()
