@@ -10,6 +10,19 @@ bool RecursiveBacktracker::Step(World* w) {
       return false; // no empty space no fill
     stack.push_back(point);
     w->SetNodeColor(point, Color::Red.Dark());
+    // remove a wall when restarting search
+    Point2D breakableNeighbor = getBreakableNeighbor(w, point);
+    auto delta = breakableNeighbor - point;
+    // remove walls
+    if (delta.y == -1)  // north
+      w->SetNorth(point, false);
+    else if (delta.x == 1)  // east
+      w->SetEast(point, false);
+    else if (delta.y == 1)  // south
+      w->SetSouth(point, false);
+    else if (delta.x == -1)  // west
+      w->SetWest(point, false);
+    return true;
   }
 
   // visit the current element
@@ -22,8 +35,11 @@ bool RecursiveBacktracker::Step(World* w) {
 
   // if we should not go deep, pop one element from the stack
   if(visitables.empty()) {
-    stack.pop_back();
-    w->SetNodeColor(current, Color::Black);
+    for (auto e : stack) {
+      w->SetNodeColor(e, Color::Black);
+    }
+    stack.clear();
+    
     return true;
   }
   else { // go deeper
@@ -92,4 +108,37 @@ std::vector<Point2D> RecursiveBacktracker::getVisitables(World* w, const Point2D
     visitables.emplace_back(p.x-1, p.y);
 
   return visitables;
+}
+
+Point2D RecursiveBacktracker::getBreakableNeighbor(World* world,
+    const Point2D& p) {
+  int sideOver2 = world->GetSize() / 2;
+
+  // check each surrounding Point2D, check if the north is inside board and is visited
+  // test for north
+  if ((abs(p.x) <= sideOver2 &&
+       abs(p.y + 1) <= sideOver2) &&  // should be inside the board
+      visited[p.y + 1][p.x]) {        // should be visited already
+    return Point2D(p.x, p.y + 1);
+  } else
+  // test for south
+  if ((abs(p.x) <= sideOver2 &&
+       abs(p.y + 1) <= sideOver2) &&  // should be inside the board
+      visited[p.y + 1][p.x]) {        // should be visited already
+    return Point2D(p.x, p.y + 1);
+  } else
+  // test for west
+  if ((abs(p.x - 1) <= sideOver2 &&
+       abs(p.y) <= sideOver2) &&  // should be inside the board
+      visited[p.y][p.x - 1]) {        // should be visited already
+    return Point2D(p.x - 1, p.y);
+  } else
+  // test for east
+  if ((abs(p.x + 1) <= sideOver2 &&
+       abs(p.y) <= sideOver2) &&  // should be inside the board
+      visited[p.y][p.x + 1]) {    // should be visited already
+    return Point2D(p.x + 1, p.y);
+  } else {
+    return Point2D(INT_MAX, INT_MAX);
+  }
 }
