@@ -20,6 +20,6 @@ class HuntAndKill : public MazeGeneratorBase {
         std::map<int, std::map<int, bool>> visited;
 
 		Point2D getRandomPoint(World* world);
-        std::vector<Point2D> getVisitableNeighbors(World* world, Point2D current);
+        std::vector<Point2D> getVisitableNeighbors(World* world);
         bool isVisitable(World* world, Point2D point);
 };

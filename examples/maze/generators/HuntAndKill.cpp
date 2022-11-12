@@ -14,8 +14,7 @@ Point2D HuntAndKill::getRandomPoint(World* world) {
 	return Point2D(x, y);
 }
 
-std::vector<Point2D> HuntAndKill::getVisitableNeighbors(World* world,
-                                                        Point2D current) {
+std::vector<Point2D> HuntAndKill::getVisitableNeighbors(World* world) {
   std::vector<Point2D> neighbors;
 
   if (isVisitable(world, Point2D(current.x, current.y - 1))) {
@@ -38,12 +37,13 @@ bool HuntAndKill::isVisitable(World* world, Point2D point) {
          !visited[point.y][point.x] && world->GetNorth(point);
 }
 
-bool HuntAndKill::Step(World* world) {
-  std::vector<Point2D> neighbors = getVisitableNeighbors(world, start);
+bool HuntAndKill::Step(World* world) {    
+  std::vector<Point2D> neighbors = getVisitableNeighbors(world);
   if (neighbors.empty()) {
     return true;
   } else {
     int index = Random::Range(0, neighbors.size());
-    
+    Point2D next = neighbors[index];
+    world->SetNodeColor(next, Color::Green);
   }
 }
