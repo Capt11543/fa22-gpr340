@@ -21,5 +21,6 @@ class HuntAndKill : public MazeGeneratorBase {
 
 		Point2D getRandomPoint(World* world);
         std::vector<Point2D> getVisitableNeighbors(World* world);
+        Point2D hunt(World* world);
         bool isVisitable(World* world, Point2D point);
 };
