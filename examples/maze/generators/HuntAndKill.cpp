@@ -1,9 +1,17 @@
 #include "HuntAndKill.h"
 
-#include "../../core/Random.h"
+#include <Random.h>
 
 void HuntAndKill::Clear(World* world) {
-
+    current = getRandomPoint(world);
+    
+    visited.clear();
+    int sizeOver2 = world->GetSize() / 2;
+    for (int i = -sizeOver2; i <= sizeOver2; i++) {
+        for (int j = -sizeOver2; j <= sizeOver2; j++) {
+            visited[i][j] = false;
+        }
+    }
 }
 
 Point2D HuntAndKill::getRandomPoint(World* world) {
@@ -16,17 +24,23 @@ Point2D HuntAndKill::getRandomPoint(World* world) {
 
 std::vector<Point2D> HuntAndKill::getVisitableNeighbors(World* world) {
   std::vector<Point2D> neighbors;
+  int sizeOver2 = world->GetSize() / 2;
 
-  if (isVisitable(world, Point2D(current.x, current.y - 1))) {
+  // north
+  if (abs(current.x) <= sizeOver2 && abs(current.y - 1) <= sizeOver2 && !visited[current.y - 1][current.x] && world->GetNorth(current)) {
     neighbors.emplace_back(Point2D(current.x, current.y - 1));
   }
-  if (isVisitable(world, Point2D(current.x, current.y + 1))) {
-    neighbors.emplace_back(Point2D(current.x, current.y + 1));
-  }
-  if (isVisitable(world, Point2D(current.x - 1, current.y))) {
+  // east
+  if (abs(current.x - 1) <= sizeOver2 && abs(current.y) <= sizeOver2 && !visited[current.y][current.x - 1] && world->GetEast(current)) {
     neighbors.emplace_back(Point2D(current.x - 1, current.y));
   }
-  if (isVisitable(world, Point2D(current.x + 1, current.y))) {
+  // south
+  if (abs(current.x) <= sizeOver2 && abs(current.y + 1) <= sizeOver2 && !visited[current.y + 1][current.x] && world->GetSouth(current)) {
+    neighbors.emplace_back(Point2D(current.x, current.y + 1));
+  }
+  // west
+  if (abs(current.x - 1) <= sizeOver2 && abs(current.y) <= sizeOver2 && !visited[current.y][current.x +
+      1] && world->GetWest(current)) {
     neighbors.emplace_back(Point2D(current.x + 1, current.y));
   }
 
@@ -47,6 +61,8 @@ Point2D HuntAndKill::hunt(World* world) {
       }
     }
   }
+
+  return Point2D(INT_MAX, INT_MAX);
 }
 
 bool HuntAndKill::isVisitable(World* world, Point2D point) {
@@ -69,7 +85,7 @@ bool HuntAndKill::Step(World* world) {
     current = hunt(world);
     return true;
   } else {
-    int index = Random::Range(0, neighbors.size());
+    int index = Random::Range(0, neighbors.size() - 1);
     Point2D next = neighbors[index];
     world->SetNodeColor(next, Color::Green);
     

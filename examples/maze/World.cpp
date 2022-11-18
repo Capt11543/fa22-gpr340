@@ -120,6 +120,7 @@ void World::OnGui(ImGuiContext *context){
     }
     ImGui::EndCombo();
   }
+  ImGui::End();
 }
 
 void World::OnDraw(SDL_Renderer* renderer){
