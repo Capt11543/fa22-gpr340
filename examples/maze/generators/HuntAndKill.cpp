@@ -37,11 +37,16 @@ Point2D HuntAndKill::hunt(World* world) {
   Point2D result;
   int sizeOver2 = world->GetSize() / 2;
   for (int i = 0; i < sizeOver2; i++) {
+    if (visited[i + 1][sizeOver2 + 1]) {
+      for (int j = 0; j < sizeOver2; j++) {
+        if (visited[i + 1][j]) {
+          return (Point2D(i + 1, j));
+        }
+      }
+    }
     if (visited[i][sizeOver2 + 1]) {
       for (int j = 0; j < sizeOver2 - 1; j++) {
         if (visited[i][j + 1]) {
-          result = Point2D(j + 1, i);
-          world->SetNodeColor(result, Color::Green);
           return Point2D(i, j);
         }
       }
@@ -67,11 +72,11 @@ bool HuntAndKill::Step(World* world) {
   std::vector<Point2D> neighbors = getVisitableNeighbors(world);
   if (neighbors.empty()) {
     current = hunt(world);
+    world->SetNodeColor(current, Color::Green);
     return true;
   } else {
     int index = Random::Range(0, neighbors.size());
     Point2D next = neighbors[index];
-    world->SetNodeColor(next, Color::Green);
     
     Point2D delta = next - current;
     if (delta.y == -1) {
@@ -85,6 +90,7 @@ bool HuntAndKill::Step(World* world) {
     }
 
     current = next;
+    world->SetNodeColor(current, Color::Green);
 
     return true;
   }
