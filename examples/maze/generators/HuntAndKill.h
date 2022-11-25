@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../core/Point2D.h"
+#include <Point2D.h>
 #include <map>
 #include "../MazeGeneratorBase.h"
 #include <vector>
@@ -12,7 +12,14 @@ class HuntAndKill : public MazeGeneratorBase {
 	public:
 		void Clear(World* world) override;
 		std::string GetName() override { return "Hunt and Kill"; }
-		HuntAndKill(World* world) : current(getRandomPoint(world)) {}
+		HuntAndKill(World* world) : current(getRandomPoint(world)) {
+			int sizeOver2 = world->GetSize() / 2;
+			for (int i = -sizeOver2; i <= sizeOver2; i++) {
+				for (int j = -sizeOver2; j <= sizeOver2; j++) {
+					visited[i][j] = false;
+				}
+			}
+		}
 		~HuntAndKill() = default;
 		bool Step(World* world) override;
 	private:
