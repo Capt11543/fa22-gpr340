@@ -1,9 +1,13 @@
-#include "RecursiveBacktracker.h"
 #include "../World.h"
 #include "Random.h"
+#include "RecursiveBacktrackerExample.h"
 #include <climits>
+<<<<<<< HEAD:examples/maze/generators/RecursiveBacktracker.cpp
 
 bool RecursiveBacktracker::Step(World* w) {
+=======
+bool RecursiveBacktrackerExample::Step(World* w) {
+>>>>>>> upstream/master:examples/maze/generators/RecursiveBacktrackerExample.cpp
   // check if we need to find a new starting point
   if(stack.empty()) {
     auto point = randomStartPoint(w);
@@ -61,7 +65,7 @@ bool RecursiveBacktracker::Step(World* w) {
     return true;
   }
 }
-void RecursiveBacktracker::Clear(World* world) {
+void RecursiveBacktrackerExample::Clear(World* world) {
   visited.clear();
   stack.clear();
   auto sideOver2 = world->GetSize()/2;
@@ -72,7 +76,7 @@ void RecursiveBacktracker::Clear(World* world) {
     }
   }
 }
-Point2D RecursiveBacktracker::randomStartPoint(World* world) {
+Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
   auto sideOver2 = world->GetSize()/2;
 
   for(int y=-sideOver2; y<=sideOver2; y++)
@@ -82,30 +86,29 @@ Point2D RecursiveBacktracker::randomStartPoint(World* world) {
   return {INT_MAX, INT_MAX};
 }
 
-std::vector<Point2D> RecursiveBacktracker::getVisitables(World* w, const Point2D& p) {
+std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const Point2D& p) {
   auto sideOver2 = w->GetSize()/2;
   std::vector<Point2D> visitables;
 
-  // todo: improve this
   // north
   if((abs(p.x)<=sideOver2 && abs(p.y-1)<=sideOver2) && // should be inside the board
-    !visited[p.y-1][p.x] && // not visited yet
-    w->GetNorth({p.x, p.y-1})) // has wall
-      visitables.emplace_back(p.x, p.y-1);
+      !visited[p.y-1][p.x] && // not visited yet
+      w->GetNorth(p)) // has wall
+    visitables.emplace_back(p.x, p.y-1);
   // east
   if((abs(p.x+1)<=sideOver2 && abs(p.y)<=sideOver2) && // should be inside the board
       !visited[p.y][p.x+1] && // not visited yet
-      w->GetNorth({p.x+1, p.y})) // has wall
+      w->GetEast(p)) // has wall
     visitables.emplace_back(p.x+1, p.y);
   // south
   if((abs(p.x)<=sideOver2 && abs(p.y+1)<=sideOver2) && // should be inside the board
       !visited[p.y+1][p.x] && // not visited yet
-      w->GetNorth({p.x, p.y+1})) // has wall
+      w->GetSouth(p)) // has wall
     visitables.emplace_back(p.x, p.y+1);
   // west
   if((abs(p.x-1)<=sideOver2 && abs(p.y)<=sideOver2) && // should be inside the board
       !visited[p.y][p.x-1] && // not visited yet
-      w->GetNorth({p.x-1, p.y})) // has wall
+      w->GetWest(p)) // has wall
     visitables.emplace_back(p.x-1, p.y);
 
   return visitables;

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
@@ -27,6 +31,7 @@ ELSE ()
     #  add_subdirectory( glew )
 ENDIF()
 
+<<<<<<< HEAD
 set(SDL_SHARED OFF CACHE BOOL "SDL_SHARED")
 SET(SDL_STATIC ON CACHE BOOL "SDL_STATIC")
 SET(SDL_STATIC_PIC ON CACHE BOOL "SDL_STATIC_PIC")
@@ -244,3 +249,12 @@ ENDIF()
 #set(BUILD_CPU_DEMOS OFF CACHE BOOL "no bullet demos.")
 #set(BUILD_BULLET3 OFF CACHE BOOL "no bullet 3.")
 #add_subdirectory(bullet3)
+=======
+#include(filament.cmake)
+include(sdl.cmake)
+include(glm.cmake)
+#include(glew.cmake)
+include(imgui.cmake)
+include(assimp.cmake)
+include(bullet.cmake)
+>>>>>>> upstream/master
