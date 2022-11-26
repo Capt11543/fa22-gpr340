@@ -14,13 +14,8 @@ class RecursiveBacktrackerExample : public MazeGeneratorBase {
   std::vector<Point2D> getVisitables(World* w, const Point2D& p);
   Point2D getBreakableNeighbor(World* world, const Point2D& point);
  public:
-<<<<<<< HEAD:examples/maze/generators/RecursiveBacktracker.h
-  RecursiveBacktracker() = default;
-  std::string GetName() override {return "Recursive Back-Tracker";}
-=======
   RecursiveBacktrackerExample() = default;
   std::string GetName() override {return "Recursive Back-Tracker";};
->>>>>>> upstream/master:examples/maze/generators/RecursiveBacktrackerExample.h
   bool Step(World * world) override;
   void Clear(World * world) override;
 };

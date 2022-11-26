@@ -2,12 +2,7 @@
 #include "Random.h"
 #include "RecursiveBacktrackerExample.h"
 #include <climits>
-<<<<<<< HEAD:examples/maze/generators/RecursiveBacktracker.cpp
-
-bool RecursiveBacktracker::Step(World* w) {
-=======
 bool RecursiveBacktrackerExample::Step(World* w) {
->>>>>>> upstream/master:examples/maze/generators/RecursiveBacktrackerExample.cpp
   // check if we need to find a new starting point
   if(stack.empty()) {
     auto point = randomStartPoint(w);
