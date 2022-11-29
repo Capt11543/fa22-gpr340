@@ -109,7 +109,7 @@ std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const 
   return visitables;
 }
 
-Point2D RecursiveBacktracker::getBreakableNeighbor(World* world,
+Point2D RecursiveBacktrackerExample::getBreakableNeighbor(World* world,
     const Point2D& p) {
   int sideOver2 = world->GetSize() / 2;
 

@@ -12,22 +12,16 @@ class HuntAndKill : public MazeGeneratorBase {
 	public:
 		void Clear(World* world) override;
 		std::string GetName() override { return "Hunt and Kill"; }
-		HuntAndKill(World* world) : current(getRandomPoint(world)) {
-			int sizeOver2 = world->GetSize() / 2;
-			for (int i = -sizeOver2; i <= sizeOver2; i++) {
-				for (int j = -sizeOver2; j <= sizeOver2; j++) {
-					visited[i][j] = false;
-				}
-			}
-		}
+        HuntAndKill(World* world);
 		~HuntAndKill() = default;
 		bool Step(World* world) override;
 	private:
 		Point2D current;
         std::map<int, std::map<int, bool>> visited;
 
+		Point2D getRandomNeighbor(World* world, Point2D point);
 		Point2D getRandomPoint(World* world);
-        std::vector<Point2D> getVisitableNeighbors(World* world);
+        std::vector<Point2D> getVisitableNeighbors(World* world, Point2D point);
         Point2D hunt(World* world);
-        bool isVisitable(World* world, Point2D point);
+        void removeAdjascentWall(World* world, Point2D next, Point2D previous);
 };
