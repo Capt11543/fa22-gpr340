@@ -4,8 +4,9 @@
 
 void HuntAndKill::Clear(World* world) {
     current = getRandomPoint(world);
-    
+    state = NORMAL;
     visited.clear();
+
     int sizeOver2 = world->GetSize() / 2;
     for (int i = -sizeOver2; i <= sizeOver2; i++) {
         for (int j = -sizeOver2; j <= sizeOver2 + 1; j++) {
@@ -88,7 +89,7 @@ Point2D HuntAndKill::hunt(World* world) {
   return Point2D(INT_MAX, INT_MAX); // return an impossibly large value if nothing is found
 }
 
-HuntAndKill::HuntAndKill(World* world) : current(getRandomPoint(world)) {
+HuntAndKill::HuntAndKill(World* world) : current(getRandomPoint(world)), state(NORMAL) {
   int sizeOver2 = world->GetSize() / 2;
   for (int i = -sizeOver2; i <= sizeOver2; i++) {
     for (int j = -sizeOver2; j <= sizeOver2; j++) {
@@ -97,31 +98,85 @@ HuntAndKill::HuntAndKill(World* world) : current(getRandomPoint(world)) {
   }
 }
 
-bool HuntAndKill::Step(World* world) {    
-  visited[current.y][current.x] = true;
-  int sizeOver2 = world->GetSize() / 2;  
-  if (!visited[current.y][sizeOver2 + 1]) {
-    visited[current.y][sizeOver2 + 1] = true; // mark this row as visited
-  }
+bool HuntAndKill::Step(World* world) {
+  int sizeOver2 = world->GetSize() / 2;
 
-  world->SetNodeColor(current, Color::Red.Dark());
-    
-  std::vector<Point2D> neighbors = getVisitableNeighbors(world, current);
-  if (neighbors.empty()) {
-    Point2D huntedPoint = hunt(world);
-    if (abs(huntedPoint.x) <= sizeOver2 && abs(huntedPoint.y) <= sizeOver2) {
-      current = hunt(world);
+  if (state == NORMAL) {
+    visited[current.y][current.x] = true;
+    if (!visited[current.y][sizeOver2 + 1]) {
+      visited[current.y][sizeOver2 + 1] = true;  // mark this row as visited
+    }
+
+    world->SetNodeColor(current, Color::Red.Dark());
+
+    std::vector<Point2D> neighbors = getVisitableNeighbors(world, current);
+    if (neighbors.empty()) {
+      /*Point2D huntedPoint = hunt(world);
+      if (abs(huntedPoint.x) <= sizeOver2 && abs(huntedPoint.y) <= sizeOver2) {
+        current = hunt(world);
+        world->SetNodeColor(current, Color::Green);
+        return true;
+      }*/
+
+      state = HUNTING_ROWS;
+      current = Point2D(-sizeOver2, -sizeOver2);
+      setRowColor(world, current.y, Color::Yellow);
+      
+      return true;
+    } else {
+      int index = Random::Range(0, neighbors.size() - 1);
+      Point2D next = neighbors[index];
+      removeAdjascentWall(world, next, current);
+      current = next;
       world->SetNodeColor(current, Color::Green);
+
       return true;
     }
-  } else {
-    int index = Random::Range(0, neighbors.size() - 1);
-    Point2D next = neighbors[index];
-    removeAdjascentWall(world, next, current);
-    current = next;
-    world->SetNodeColor(current, Color::Green);
+  }
+  if (state == HUNTING_ROWS) {
+    if (visited[current.y][sizeOver2 + 1]) {
+      state = HUNTING_COLUMNS;
+      setRowColor(world, current.y, Color::LightGray);
+      world->SetNodeColor(current, Color::Yellow);
 
-    return true;
+      return true;
+    } else {
+      setRowColor(world, current.y, Color::LightGray);
+      current = Point2D(current.x, current.y + 1);
+      setRowColor(world, current.y, Color::Yellow);
+
+      return true;
+    }
+  }
+  if (state == HUNTING_COLUMNS) {
+    if (visited[current.y][current.x]) {
+      Point2D neighbor = getRandomNeighbor(world, current);
+      if (abs(neighbor.x) <= sizeOver2 && abs(neighbor.y) <= sizeOver2) {
+        state = NORMAL;
+        removeAdjascentWall(world, neighbor, current);
+        if (visited[current.y][current.x]) {
+          world->SetNodeColor(current, Color::Red.Dark());
+        } else {
+          world->SetNodeColor(current, Color::LightGray);
+        }
+        current = neighbor;
+        world->SetNodeColor(current, Color::Green);
+
+        return true;
+      } else {
+        world->SetNodeColor(current, Color::LightGray);
+        current = Point2D(current.x + 1, current.y);
+        world->SetNodeColor(current, Color::Yellow);
+
+        return true;
+      }
+    } else {
+      world->SetNodeColor(current, Color::LightGray);
+      current = Point2D(current.x + 1, current.y);
+      world->SetNodeColor(current, Color::Yellow);
+
+      return true;
+    }
   }
 
   return false;
@@ -137,5 +192,14 @@ void HuntAndKill::removeAdjascentWall(World* world, Point2D next, Point2D previo
     world->SetSouth(current, false);
   } else if (delta.x == -1) {
     world->SetWest(current, false);
+  }
+}
+
+void HuntAndKill::setRowColor(World* world, int rowNumber, const Color32& color) {
+  int sizeOver2 = world->GetSize() / 2;
+  for (int i = -sizeOver2; i <= sizeOver2; i++) {
+    if (!visited[rowNumber][i]) {
+      world->SetNodeColor(Point2D(i, rowNumber), color);
+    }
   }
 }
