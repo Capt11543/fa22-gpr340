@@ -16,7 +16,7 @@ class HuntAndKill : public MazeGeneratorBase {
 		~HuntAndKill() = default;
 		bool Step(World* world) override;
 	private:
-		enum State {
+		enum State { // use enum class instead
 			NORMAL,
 			HUNTING_ROWS,
 			HUNTING_COLUMNS
@@ -25,10 +25,11 @@ class HuntAndKill : public MazeGeneratorBase {
 		Point2D current;
 		State state;
         std::map<int, std::map<int, bool>> visited;
+		// make new vector for row visited check
 
 		Point2D getRandomNeighbor(World* world, Point2D point);
 		Point2D getRandomPoint(World* world);
-        std::vector<Point2D> getVisitableNeighbors(World* world, Point2D point);
+        std::vector<Point2D> getVisitableNeighbors(World* w, Point2D p);
         Point2D hunt(World* world);
         void removeAdjascentWall(World* world, Point2D next, Point2D previous);
         void setRowColor(World* world, int rowNumber, const Color32& color);
