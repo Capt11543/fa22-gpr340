@@ -15,7 +15,7 @@ bool HuntAndKill::allColumnsVisited(World* world, int rowNumber) {
 void HuntAndKill::Clear(World* world) {
   int sizeOver2 = world->GetSize() / 2;
 
-  current = Point2D(-sizeOver2, -sizeOver2);
+  current = getRandomPoint(world);
   state = State::DIVING;
 
   visited.clear();
