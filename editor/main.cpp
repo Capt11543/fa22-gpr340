@@ -3,13 +3,12 @@
 #include <vector>
 //#include <gdcmReader.h>
 //#include <gdcmDirectory.h>
-//#include <map>
 
 //void readDicom(std::vector<std::string> filenames) {
 //  bool verbose = true;
 //  bool recursive = true;
 //  std::vector<std::string> names;
-//  gdcm::Reader testreader;
+//  gdcm_ns::Reader testreader;
 //  // Is it a single directory ? If so loop over all files contained in it:
 //  // const char *filename = argv[1];
 //  if (filenames.size() == 1 &&
@@ -61,7 +60,6 @@
 //  }
 //  // names->Print( std::cout );
 //}
-
 
 // Main code
 int main(int, char**) {
